@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Call with Token</title>
+</head>
+<body>
+    <h1>API Call with Token</h1>
+    <button id="fetchButton">Fetch Data</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('fetchButton').addEventListener('click', () => {
+            const token = '20af9e857eedfe82d9fde0fb043d6789dd8c1607';
+            const url = 'https://gee112.pythonanywhere.com/members/';
+
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Token ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+                    console.error('Network error or CORS issue:', error);
+                    document.getElementById('result').innerText = 'Network error or CORS issue. Check the console for details.';
+                } else {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('result').innerText = `Error fetching data: ${error.message}`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
